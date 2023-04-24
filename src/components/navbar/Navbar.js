@@ -1,5 +1,4 @@
 import React from 'react'
-
 export default function Navbar() {
     return (
         <div className="bg-slate-700 w-full h-10 flex m-auto">
@@ -12,8 +11,8 @@ export default function Navbar() {
                 <input type="text"
                     className="flex bg-slate-700 target:border-cyan-50  text-slate-300 placeholder-slate-400 placeholder:italic focus:outline-none
                     px-1 text-sm" placeholder='What you looking for?' />
-            </div>
 
+            </div>
         </div >
     )
 }
