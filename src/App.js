@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 function App() {
 
   return (
-    <div className="overflow-hidden bg-slate-900 h-screen">
+    <div className="bg-slate-900 h-screen">
       <Navbar />
       <Card />
     </div >
