@@ -24,11 +24,20 @@ function Card() {
             <div><p>Loading...</p></div>
         )
     } else {
-        console.log(movies)
         return (
             <div>
-                {movies[0].id}
+                {
+                    movies.map(element => {
+                        <div className="max-w-xs h-80 rounded-lg overflow-hidden bg-slate-800 shadow-2xl m-5">
+                            <img className="w-full" src={element.primaryImage?.url} alt="" />
+                            <p className="font-bold font-sans text-xl text-center text-slate-100 my-3">{element.titleText?.text}</p>
+                            <p className="rounded-lg bg-slate-700 text-slate-300 text-center w-16 my-3 m-auto">#{element.releaseYear?.year}</p>
+                        </div>
+                    })
+                }
             </div>
+
+
         )
     }
 
