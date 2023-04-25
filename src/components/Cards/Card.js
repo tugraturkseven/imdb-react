@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
 function Card() {
+    const [loading, setLoading] = useState(true);
     const [movies, setMovies] = useState([]);
     useEffect(() => {
         axios({
@@ -14,18 +14,25 @@ function Card() {
                 'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
             }
         }).then(res => {
-            movies = res.data.results;
-            console.log(movies)
+            setMovies(res.data.results);
+            setLoading(false);
         })
-    )
+    }, [])
+
+    if (loading) {
+        return (
+            <div><p>Loading...</p></div>
+        )
+    } else {
+        console.log(movies)
+        return (
+            <div>
+                {movies[0].id}
+            </div>
+        )
+    }
+
+
 }
-
-
-return (
-    <div>
-        {movies}
-    </div>
-)
-
 
 export default Card;
