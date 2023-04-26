@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 
 function Card() {
     const [loading, setLoading] = useState(true);
@@ -36,7 +38,8 @@ function Card() {
                     movies.map(element => {
                         if (typeof element.primaryImage?.url == "string") {
                             return (
-                                <div key={element?.id} className="w-64 h-96 min-h-96 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto" >
+                                <div key={element?.id} className="relative w-64 h-96 min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto" >
+                                    <FontAwesomeIcon icon={faHeartBroken} className="absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl text-white  bg-slate-700  p-2 rounded-full "></FontAwesomeIcon>
                                     <img className="w-full max-h-80" src={element.primaryImage?.url} alt="" />
                                     <p className="font-bold font-sans text-xl md:text-md sm:text-sm   text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
                                 </div>
