@@ -9,7 +9,7 @@ function App() {
   const searchParams = new URLSearchParams(document.location.search)
   let param = searchParams.get('search');
   if (typeof param != "string") {
-    param = '/'
+    param = ''
   }
 
   return (

@@ -10,7 +10,8 @@ export default function Navbar() {
     const [value, setValue] = useState('');
 
     return (
-        <div className="bg-gradient-to-r from-gray-700 via-gray-900 to-black w-full h-10 flex m-auto">
+
+        <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 drop-shadow-2xl backdrop-blur-xl  w-full h-10 flex m-auto">
             <FontAwesomeIcon icon={faFilm} style={{ color: "#fd3a3a", }} className="text-2xl my-auto ml-5" />
             <a href="/" className=" my-auto ml-2 mr-2 text-slate-100 font-bold font-mono ">Movie App</a>
             <a href="/series" className="p-2 text-slate-400 hover:text-slate-100 transition-colors">Series</a>
