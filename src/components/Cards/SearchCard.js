@@ -30,7 +30,6 @@ function SearchCard(props) {
 
 
     const listResult = () => {
-        console.log(results.length);
         if (results.length > 0) {
             return (
                 <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4  bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">

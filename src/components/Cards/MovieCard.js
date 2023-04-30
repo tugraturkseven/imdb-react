@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeartBroken } from '@fortawesome/free-solid-svg-icons'
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeartBroken } from '@fortawesome/free-solid-svg-icons';
 
 function MovieCard() {
     const [loading, setLoading] = useState(true);
     const [movies, setMovies] = useState([]);
-
 
     useEffect(() => {
         axios({
@@ -27,38 +24,40 @@ function MovieCard() {
         }).then(res => {
             setMovies(res.data.results);
             setLoading(false);
-
         })
     }, [])
 
+    const handleMovies = useMemo(() => {
+        return movies.map(element => {
+            if (typeof element.primaryImage?.url === "string") {
+                return (
+                    <div key={element.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 mx-auto" >
+                        <FontAwesomeIcon icon={faHeartBroken} className="absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl text-white bg-slate-700 p-2 rounded-full "></FontAwesomeIcon>
+                        <a href={`/${element.id}?details=${element.id}`} target='_'>
+                            <img className="w-full max-h-80" src={element.primaryImage.url} alt="" />
+                        </a>
+                        <p className="font-bold font-sans text-xl md:text-md sm:text-sm mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText.text}</p>
+                    </div>
+                )
+            } else {
+                return null;
+            }
+        });
+    }, [movies]);
+
     if (loading) {
         return (
-            <div><p>Loading...</p></div>
+            <div>
+                <p>Loading...</p>
+            </div>
         )
     } else {
         return (
-            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4  bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
-                {
-                    movies.map(element => {
-                        if (typeof element.primaryImage?.url == "string") {
-                            return (
-                                <div key={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5  mx-auto" >
-                                    <FontAwesomeIcon icon={faHeartBroken} className="absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl text-white  bg-slate-700  p-2 rounded-full "></FontAwesomeIcon>
-                                    <a href={"/" + element?.id + "?details=" + element?.id} target='_'>
-                                        <img className="w-full max-h-80" src={element.primaryImage?.url} alt="" />
-                                    </a>
-                                    <p className="font-bold font-sans text-xl md:text-md sm:text-sm  mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
-                                </div>
-                            )
-                        } else {
-
-                        }
-                    })
-                }
+            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
+                {handleMovies}
             </div>
         )
     }
-
 }
 
 export default MovieCard;
