@@ -22,9 +22,9 @@ function DetailsPage(props) {
     }, [])
 
     const handleData = () => {
-        const genresArr = data.genres.genres;
+        const genresArr = data.genres?.genres;
         const rating = () => {
-            const score = parseFloat(data.ratingsSummary.aggregateRating);
+            const score = parseFloat(data.ratingsSummary?.aggregateRating);
             if (score > 7.0) {
                 return (
                     <p className='inline-block px-3 mx-5 bg-emerald-600 rounded-full font-semibold '>{score}</p>
@@ -41,27 +41,27 @@ function DetailsPage(props) {
                 )
             }
         };
-        const imgUrl = data.primaryImage.url;
-        const lang = data.plot.language.id;
-        const desc = data.plot.plotText.plainText;
-        const year = data.releaseYear.year;
-        const duration = data.runtime.displayableProperty.value.plainText;
-        const title = data.titleText.text;
-        const titleType = data.titleType.text;
+        const imgUrl = data.primaryImage?.url;
+        const lang = data.plot.language?.id;
+        const desc = data.plot.plotText?.plainText;
+        const year = data.releaseYear?.year;
+        const duration = data.runtime.displayableProperty?.value?.plainText;
+        const title = data.titleText?.text;
+        const titleType = data.titleType?.text;
         const genres = genresArr.map(item => {
-            return <p className='inline-block pr-1'>{item.text}</p>
+            return <p className='inline-block  bg-violet-700 rounded-full pl-3 pr-3 mr-2 my-3 text-center'>{item.text}</p>
         });
 
         return (
             <div className="grid grid-cols-2 h-screen bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
                 <img src={imgUrl} alt={title} className="w-96 rounded m-auto drop-shadow-2xl" />
                 <div className="my-auto pr-64 text-slate-200">
-                    <h1 className="inline-block font-bold text-3xl underline mb-2">{title}</h1>
+                    <h1 className="inline-block font-bold text-3xl underline mb-2 max-w-lg">{title}</h1>
                     {rating()}
-                    <p className="float-right font-semibold bg-slate-700 opacity-75 rounded-full w-14 h-6 text-center text-sm m-auto">{year}</p>
-                    <h2 className="font-medium opacity-70">{titleType}, {lang}, {duration}.</h2>
+                    <p className="float-right font-semibold bg-slate-700 opacity-75 rounded-full w-14 h-5 text-center text-sm m-auto">{year}</p>
+                    <h2 className="font-medium opacity-70">{titleType} {lang} {duration}</h2>
                     {genres}
-                    <p>{desc}</p>
+                    <p className="text-xl">{desc}</p>
                 </div>
             </div>
         )
