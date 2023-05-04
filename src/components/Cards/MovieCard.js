@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeartBroken } from '@fortawesome/free-solid-svg-icons';
+import Favourited from '../Favourite/Favourited';
 
 function MovieCard() {
     const [loading, setLoading] = useState(true);
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
+
         axios({
             method: 'GET',
             url: 'https://moviesdatabase.p.rapidapi.com/titles',
@@ -22,19 +22,19 @@ function MovieCard() {
                 'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
             }
         }).then(res => {
-            console.log("rendered");
             setMovies(res.data.results);
             setLoading(false);
         })
+
     }, [])
 
     const handleMovies = useMemo(() => {
         return movies.map(element => {
             if (typeof element.primaryImage?.url === "string") {
                 return (
-                    <div key={element.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 mx-auto" >
-                        <FontAwesomeIcon icon={faHeartBroken} className="absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl text-white bg-slate-700 p-2 rounded-full "></FontAwesomeIcon>
-                        <a href={`/${element.id}?details=${element.id}`} target='_blank'>
+                    <div key={element.id} id={element.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 mx-auto" >
+                        <Favourited />
+                        <a href={`/${element.id}?details=${element.id}`} target='_blank' rel="noreferrer">
                             <img className="w-full max-h-80" src={element.primaryImage.url} alt="" />
                             <p className="font-bold font-sans text-xl md:text-md sm:text-sm mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText.text}</p>
                         </a>
@@ -44,6 +44,8 @@ function MovieCard() {
                 return null;
             }
         });
+
+
     }, [movies]);
 
     if (loading) {
