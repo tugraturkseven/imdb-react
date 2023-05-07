@@ -7,6 +7,7 @@ import SearchCard from './components/Cards/SearchCard';
 import DetailsPage from './components/Details/DetailsPage';
 
 function App() {
+  console.log("rendered app");
   const getParams = new URLSearchParams(document.location.search)
   let searchParam = getParams.get('search');
   let detailsParam = getParams.get('details');
