@@ -48,6 +48,10 @@ function SearchCard(props) {
                 <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
                     {results.map(element => {
                         if (typeof element.primaryImage?.url === 'string') {
+                            const genresArr = element?.genres?.genres || [];
+                            const genres = genresArr.slice(0, 2).map(item => {
+                                return <p className='inline-block  bg-violet-500 bg-opacity-20 rounded-full pl-3 pr-3 mx-2 mb-4 text-slate-300 font-thin text-center'>#{item.text}</p>
+                            });
                             return (
                                 <div key={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto">
                                     <FontAwesomeIcon icon={faHeartBroken} className="absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl text-white bg-slate-700 p-2 rounded-full"></FontAwesomeIcon>
@@ -55,6 +59,7 @@ function SearchCard(props) {
                                         <img className="w-full h-80 object-cover" src={element.primaryImage?.url} alt="" />
                                         <p className="font-bold font-sans text-xl md:text-md sm:text-sm mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
                                     </a>
+                                    {genres}
                                 </div>
                             );
                         }
