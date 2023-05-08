@@ -16,7 +16,7 @@ export default function Navbar() {
             <a href="/" className=" my-auto ml-2 mr-2 text-slate-100 font-bold font-mono ">Movie App</a>
             <a href="/series" className="p-2 text-slate-400 hover:text-slate-100 transition-colors">Series</a>
             <a href="/movies" className="p-2 text-slate-400 hover:text-slate-100 transition-colors">Films</a>
-            <a href="#" className="p-2 text-slate-400 hover:text-slate-100 transition-colors">Favourites</a>
+            <a href="/favorites" className="p-2 text-slate-400 hover:text-slate-100 transition-colors">Favorites</a>
 
 
             <div className="absolute border rounded-lg p-1 h-7 my-auto end-2 top-1 border-slate-500 hover:border-slate-300 second:bg-red-600 invisible md:visible">

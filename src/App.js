@@ -5,6 +5,7 @@ import MovieCard from './components/Cards/MovieCard'
 import SeriesCard from './components/Cards/SeriesCard'
 import SearchCard from './components/Cards/SearchCard';
 import DetailsPage from './components/Details/DetailsPage';
+import Favorites from './components/Cards/Favorites';
 
 function App() {
   console.log("rendered app");
@@ -30,6 +31,7 @@ function App() {
           <Route path="movies" element={<MovieCard />} />
           <Route path={"/" + searchParam} element={<SearchCard searchKey={searchParam} />} />
           <Route path={"/" + detailsParam} element={<DetailsPage detailsKey={detailsParam} />} />
+          <Route path="favorites" element={<Favorites />} />
         </Routes>
       </BrowserRouter>
     </div >

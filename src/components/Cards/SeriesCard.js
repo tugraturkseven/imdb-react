@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Favorited from '../Favourite/Favorited';
 
-function SeriesCard() {
-    const [loading, setLoading] = useState(true);
-    const [series, setSeries] = useState([]);
-
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: 'https://moviesdatabase.p.rapidapi.com/titles',
+async function fetchSeries() {
+    try {
+        const response = await axios.get('https://moviesdatabase.p.rapidapi.com/titles', {
             params: {
                 list: 'most_pop_series',
                 limit: '50',
@@ -20,39 +15,54 @@ function SeriesCard() {
                 'X-RapidAPI-Key': '531544e39amsh6145987e479baf9p104408jsnc6a3e9e4ba60',
                 'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
             }
-        }).then(res => {
-            setSeries(res.data.results);
-            setLoading(false);
+        });
+        return response.data.results;
+    } catch (error) {
+        console.error('Error fetching series:', error);
+        return [];
+    }
+}
 
-        })
-    }, [])
+function SeriesCard() {
+    const [loading, setLoading] = useState(true);
+    const [series, setSeries] = useState([]);
+
+    const fetchSeriesData = useCallback(async () => {
+        const seriesData = await fetchSeries();
+        setSeries(seriesData);
+        setLoading(false);
+    }, []);
+
+    useEffect(() => {
+        fetchSeriesData();
+    }, [fetchSeriesData]);
 
     if (loading) {
         return (
-            <div><p>Loading...</p></div>
-        )
-    } else {
-        return (
-            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4  bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
-                {
-                    series.map(element => {
-                        if (typeof element.primaryImage?.url == "string") {
-                            return (
-                                <div key={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto" >
-                                    <Favorited elementID={element?.id} />
-                                    <img className="w-full h-80 object-cover" src={element.primaryImage?.url} alt="" />
-                                    <p className="font-bold font-sans text-xl md:text-md sm:text-sm  mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
-                                </div>
-                            )
-                        } else {
-                            return null;
-                        }
-                    })
-                }
+            <div>
+                <p>Loading...</p>
             </div>
-        )
+        );
     }
 
+    return (
+        <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
+            {series.map(element => {
+                if (typeof element.primaryImage?.url === 'string') {
+                    return (
+                        <div key={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto">
+                            <Favorited elementID={element?.id} />
+                            <a href={`/${element.id}?details=${element.id}`} target="_blank" rel="noreferrer">
+                                <img className="w-full h-80 object-cover" src={element.primaryImage?.url} alt="" />
+                                <p className="font-bold font-sans text-xl md:text-md sm:text-sm mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
+                            </a>
+                        </div>
+                    );
+                }
+                return null;
+            })}
+        </div>
+    );
 }
 
-export default SeriesCard
+export default SeriesCard;
