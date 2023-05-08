@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeartBroken } from '@fortawesome/free-solid-svg-icons'
-
+import Favorited from '../Favourite/Favorited';
 
 function SeriesCard() {
     const [loading, setLoading] = useState(true);
@@ -41,13 +39,13 @@ function SeriesCard() {
                         if (typeof element.primaryImage?.url == "string") {
                             return (
                                 <div key={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto" >
-                                    <FontAwesomeIcon icon={faHeartBroken} className="absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl text-white  bg-slate-700  p-2 rounded-full "></FontAwesomeIcon>
+                                    <Favorited elementID={element?.id} />
                                     <img className="w-full h-80 object-cover" src={element.primaryImage?.url} alt="" />
                                     <p className="font-bold font-sans text-xl md:text-md sm:text-sm  mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
                                 </div>
                             )
                         } else {
-
+                            return null;
                         }
                     })
                 }
