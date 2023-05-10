@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTruckRampBox } from '@fortawesome/free-solid-svg-icons';
 
 
-function DetailsPage(props) {
+
+function DetailsPage() {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const { id } = useParams();
 
     useEffect(() => {
         axios({
             method: 'GET',
-            url: `https://moviesdatabase.p.rapidapi.com/titles/${props.detailsKey}`,
+            url: `https://moviesdatabase.p.rapidapi.com/titles/${id}`,
             params: { info: 'base_info' },
             headers: {
                 'X-RapidAPI-Key': '531544e39amsh6145987e479baf9p104408jsnc6a3e9e4ba60',
@@ -19,7 +24,7 @@ function DetailsPage(props) {
             setData(res.data.results);
             setLoading(false)
         })
-    }, [])
+    }, [id])
 
     const handleData = () => {
         const genresArr = data.genres?.genres;
@@ -45,7 +50,7 @@ function DetailsPage(props) {
         const lang = data.plot.language?.id;
         const desc = data.plot.plotText?.plainText;
         const year = data.releaseYear?.year;
-        const duration = data.runtime.displayableProperty?.value?.plainText;
+        const duration = data.runtime?.displayableProperty?.value?.plainText;
         const title = data.titleText?.text;
         const titleType = data.titleType?.text;
         const genres = genresArr.map(item => {
@@ -71,7 +76,10 @@ function DetailsPage(props) {
 
     if (loading) {
         return (
-            <div><p>Loading...</p></div>
+            <div className="grid grid-cols-1 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+                <FontAwesomeIcon icon={faTruckRampBox} style={{ color: '#ffffff' }} className="m-auto w-72 h-72 opacity-75" />
+                <p className="text-center text-3xl text-slate-200 italic">Loading...</p>
+            </div>
         )
     } else {
         return (

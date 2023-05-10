@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeartBroken, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+import { faHeartBroken, faFaceSadCry, faTruckRampBox } from '@fortawesome/free-solid-svg-icons';
 
 async function fetchSearchResults(searchKey) {
     try {
@@ -24,23 +24,24 @@ async function fetchSearchResults(searchKey) {
     }
 }
 
-function SearchCard(props) {
+function SearchCard() {
     const [loading, setLoading] = useState(true);
     const [results, setResults] = useState([]);
+    const getParams = new URLSearchParams(document.location.search)
+    let searchParam = getParams.get('key');
+    if (typeof searchParam != "string") {
+        searchParam = '';
+    }
 
     useEffect(() => {
         const fetchData = async () => {
-            const searchResults = await fetchSearchResults(props.searchKey);
+            const searchResults = await fetchSearchResults(searchParam);
             setResults(searchResults);
             setLoading(false);
         };
 
         fetchData();
-    }, [props.searchKey]);
-
-    if (loading) {
-        return <div><p>Loading...</p></div>;
-    }
+    }, [searchParam]);
 
     const listResult = () => {
         if (results.length > 0) {
@@ -77,11 +78,20 @@ function SearchCard(props) {
         }
     };
 
-    return (
-        <>
-            {listResult()}
-        </>
-    );
+    if (loading) {
+        return (
+            <div className="grid grid-cols-1 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+                <FontAwesomeIcon icon={faTruckRampBox} style={{ color: '#ffffff' }} className="m-auto w-72 h-72 opacity-75" />
+                <p className="text-center text-3xl text-slate-200 italic">Loading...</p>
+            </div>
+        )
+    } else {
+        return (
+            <>
+                {listResult()}
+            </>
+        );
+    }
 }
 
 export default SearchCard;

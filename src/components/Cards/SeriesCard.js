@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Favorited from '../Favourite/Favorited';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTruckRampBox } from '@fortawesome/free-solid-svg-icons';
+
 
 async function fetchSeries() {
     try {
@@ -39,10 +42,11 @@ function SeriesCard() {
 
     if (loading) {
         return (
-            <div>
-                <p>Loading...</p>
+            <div className="grid grid-cols-1 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+                <FontAwesomeIcon icon={faTruckRampBox} style={{ color: '#ffffff' }} className="m-auto w-72 h-72 opacity-75" />
+                <p className="text-center text-3xl text-slate-200 italic">Loading...</p>
             </div>
-        );
+        )
     }
 
     return (

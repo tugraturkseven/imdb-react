@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Favorited from '../Favourite/Favorited';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTruckRampBox } from '@fortawesome/free-solid-svg-icons';
+
 
 async function fetchMovies() {
     try {
@@ -41,35 +44,38 @@ function MovieCard() {
 
     if (loading) {
         return (
-            <div>
-                <p>Loading...</p>
+            <div className="grid grid-cols-1 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+                <FontAwesomeIcon icon={faTruckRampBox} style={{ color: '#ffffff' }} className="m-auto w-72 h-72 opacity-75" />
+                <p className="text-center text-3xl text-slate-200 italic">Loading...</p>
+            </div>
+        )
+    } else {
+        return (
+            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
+                {movies.map(element => {
+                    if (typeof element.primaryImage?.url === 'string') {
+                        const genresArr = element?.genres?.genres || [];
+                        const genres = genresArr.slice(0, 2).map(item => {
+                            return <p className='inline-block  bg-violet-500 bg-opacity-20 rounded-full pl-3 pr-3 mx-2 mb-4 text-slate-300 font-thin text-center'>#{item.text}</p>
+                        });
+                        return (
+                            <div key={element.id} id={element.id} className="relative w-64 h-96 rounded-lg overflow-hidden shadow-2xl m-5 mx-auto text-center">
+                                <Favorited elementID={element.id} />
+                                <a href={`/details/${element.id}`} target="_blank" rel="noreferrer">
+                                    <img className="w-full max-h-80" src={element.primaryImage.url} alt="" />
+                                    <p className="font-bold font-sans text-xl md:text-md sm:text-sm text-center text-slate-100 -bottom-10 w-auto mx-2 truncate">{element.titleText.text}</p>
+                                </a>
+                                {genres}
+                            </div>
+                        );
+                    }
+                    return null;
+                })}
             </div>
         );
     }
 
-    return (
-        <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
-            {movies.map(element => {
-                if (typeof element.primaryImage?.url === 'string') {
-                    const genresArr = element?.genres?.genres || [];
-                    const genres = genresArr.slice(0, 2).map(item => {
-                        return <p className='inline-block  bg-violet-500 bg-opacity-20 rounded-full pl-3 pr-3 mx-2 mb-4 text-slate-300 font-thin text-center'>#{item.text}</p>
-                    });
-                    return (
-                        <div key={element.id} id={element.id} className="relative w-64 h-96 rounded-lg overflow-hidden shadow-2xl m-5 mx-auto text-center">
-                            <Favorited elementID={element.id} />
-                            <a href={`/${element.id}?details=${element.id}`} target="_blank" rel="noreferrer">
-                                <img className="w-full max-h-80" src={element.primaryImage.url} alt="" />
-                                <p className="font-bold font-sans text-xl md:text-md sm:text-sm text-center text-slate-100 -bottom-10 w-auto mx-2 truncate">{element.titleText.text}</p>
-                            </a>
-                            {genres}
-                        </div>
-                    );
-                }
-                return null;
-            })}
-        </div>
-    );
+
 }
 
 export default MovieCard;

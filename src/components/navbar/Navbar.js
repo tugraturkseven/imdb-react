@@ -20,7 +20,7 @@ export default function Navbar() {
 
 
             <div className="absolute border rounded-lg p-1 h-7 my-auto end-2 top-1 border-slate-500 hover:border-slate-300 second:bg-red-600 invisible md:visible">
-                <a href={"/" + value + "?search=" + value} className='w-5 h-5 float-left m-auto'>
+                <a href={"/search?key=" + value} className='w-5 h-5 float-left m-auto'>
                     <FontAwesomeIcon icon={faMagnifyingGlass} style={{ color: "#ffffff" }} className='w-4 h-4 pb-1 pt-0.5 pl-0.5 opacity-70' />
                 </a>
                 <input type="text"

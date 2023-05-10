@@ -8,18 +8,6 @@ import DetailsPage from './components/Details/DetailsPage';
 import Favorites from './components/Cards/Favorites';
 
 function App() {
-  console.log("rendered app");
-  const getParams = new URLSearchParams(document.location.search)
-  let searchParam = getParams.get('search');
-  let detailsParam = getParams.get('details');
-
-  if (typeof searchParam != "string") {
-    searchParam = '';
-  }
-
-  if (typeof detailsParam != "string") {
-    detailsParam = '';
-  }
 
   return (
     <div className="max-h-screen">
@@ -29,8 +17,8 @@ function App() {
           <Route path="/" element={<MovieCard />} />
           <Route path="series" element={<SeriesCard />} />
           <Route path="movies" element={<MovieCard />} />
-          <Route path={"/" + searchParam} element={<SearchCard searchKey={searchParam} />} />
-          <Route path={"/" + detailsParam} element={<DetailsPage detailsKey={detailsParam} />} />
+          <Route path={"/search"} element={<SearchCard />} />
+          <Route path={"/details/:id"} element={<DetailsPage />} />
           <Route path="favorites" element={<Favorites />} />
         </Routes>
       </BrowserRouter>

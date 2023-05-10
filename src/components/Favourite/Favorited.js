@@ -6,7 +6,6 @@ function Favorited({ elementID }) {
     const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
-        // Check if the movie is already favorited in local storage
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         setIsFavorite(favorites.includes(elementID));
     }, [elementID]);
@@ -14,8 +13,8 @@ function Favorited({ elementID }) {
     const toggleFavorite = () => {
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         const updatedFavorites = favorites.includes(elementID)
-            ? favorites.filter(id => id !== elementID) // Remove from favorites
-            : [...favorites, elementID]; // Add to favorites
+            ? favorites.filter(id => id !== elementID)
+            : [...favorites, elementID];
 
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
