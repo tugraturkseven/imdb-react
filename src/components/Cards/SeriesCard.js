@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import Favorited from '../Favourite/Favorited';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTruckRampBox } from '@fortawesome/free-solid-svg-icons';
+import Loading from '../Loading/Loading';
+import Card from './Card';
 
 
 async function fetchSeries() {
@@ -42,36 +41,23 @@ function SeriesCard() {
 
     if (loading) {
         return (
-            <div className="grid grid-cols-1 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 min-h-screen">
-                <FontAwesomeIcon icon={faTruckRampBox} style={{ color: '#ffffff' }} className="m-auto w-72 h-72 opacity-75" />
-                <p className="text-center text-3xl text-slate-200 italic">Loading...</p>
-            </div>
+            <Loading />
         )
-    }
-
-    return (
-        <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
-            {series.map(element => {
-                if (typeof element.primaryImage?.url === 'string') {
+    } else {
+        return (
+            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
+                {series.map(element => {
+                    const id = element?.id;
+                    const imgUrl = element?.primaryImage?.url;
                     const genresArr = element?.genres?.genres || [];
-                    const genres = genresArr.slice(0, 2).map(item => {
-                        return <p className='inline-block  bg-violet-500 bg-opacity-20 rounded-full pl-3 pr-3 mx-2 mb-4 text-slate-300 font-thin text-center'>#{item.text}</p>
-                    });
+                    const title = element?.titleText?.text;
                     return (
-                        <div key={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 hover:cursor-pointer mx-auto">
-                            <Favorited elementID={element?.id} />
-                            <a href={`/${element.id}?details=${element.id}`} target="_blank" rel="noreferrer">
-                                <img className="w-full h-80 object-cover" src={element.primaryImage?.url} alt="" />
-                                <p className="font-bold font-sans text-xl md:text-md sm:text-sm mb-5 text-center text-slate-100 -bottom-10 w-full">{element.titleText?.text}</p>
-                            </a>
-                            {genres}
-                        </div>
+                        <Card cardid={id} imgUrl={imgUrl} genresArray={genresArr} title={title} />
                     );
-                }
-                return null;
-            })}
-        </div>
-    );
+                })}
+            </div>
+        );
+    }
 }
 
 export default SeriesCard;

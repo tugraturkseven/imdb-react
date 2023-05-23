@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Favorited from '../Favourite/Favorited';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTruckRampBox } from '@fortawesome/free-solid-svg-icons';
+import Card from './Card';
+import Loading from '../Loading/Loading';
+
 
 function Favorites() {
     const [favorites, setFavorites] = useState([]);
@@ -45,23 +45,20 @@ function Favorites() {
 
     if (loading) {
         return (
-            <div className="grid grid-cols-1 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 min-h-screen">
-                <FontAwesomeIcon icon={faTruckRampBox} style={{ color: '#ffffff' }} className="m-auto w-72 h-72 opacity-75" />
-                <p className="text-center text-3xl text-slate-200 italic">Loading...</p>
-            </div>
+            <Loading />
         )
     } else {
         return (
-            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 h-screen ">
-                {elementData.map((element) => (
-                    <div key={element?.id} id={element?.id} className="relative w-64 h-fit min-h-80 rounded-lg overflow-hidden shadow-2xl m-5 mx-auto">
-                        <Favorited elementID={element.id} />
-                        <a href={`/${element.id}?details=${element.id}`} target="_blank" rel="noreferrer">
-                            <img className="w-full max-h-80" src={element?.primaryImage?.url} alt="" />
-                            <p className="font-bold font-sans text-xl md:text-md sm:text-sm mb-5 text-center text-slate-100 -bottom-10 w-full">{element?.titleText?.text}</p>
-                        </a>
-                    </div>
-                ))}
+            <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
+                {elementData.map(element => {
+                    const id = element?.id;
+                    const imgUrl = element?.primaryImage?.url;
+                    const genresArr = element?.genres?.genres || [];
+                    const title = element?.titleText?.text;
+                    return (
+                        <Card cardid={id} imgUrl={imgUrl} genresArray={genresArr} title={title} />
+                    );
+                })}
             </div>
         );
     }

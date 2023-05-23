@@ -24,7 +24,7 @@ function Favorited({ elementID }) {
         <div onClick={toggleFavorite}>
             <FontAwesomeIcon
                 icon={isFavorite ? faHeart : faHeartBroken}
-                className={`absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl rounded-full bg-slate-700 p-2 ${isFavorite ? 'text-red-700' : 'text-white'}`}
+                className={`absolute top-3 right-3 text-lg hover:text-xl drop-shadow-xl  transition-all  rounded-full bg-slate-700 p-2 ${isFavorite ? 'text-red-700' : 'text-white'}`}
             />
         </div>
     );
