@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useCallback, lazy } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 import Card from './Card';
-
-
 
 async function fetchMovies(page) {
     try {
@@ -39,14 +37,6 @@ function MovieCard() {
         setLoading(false);
     }, [page]);
 
-    useEffect(() => {
-        fetchMoviesData();
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [fetchMoviesData, page]);
-
     const handleScroll = useCallback(() => {
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
@@ -57,6 +47,16 @@ function MovieCard() {
             setPage(prevPage => prevPage + 1);
         }
     }, []);
+
+
+    useEffect(() => {
+        fetchMoviesData();
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [fetchMoviesData, page, handleScroll]);
+
 
 
 
@@ -71,7 +71,7 @@ function MovieCard() {
                     const genresArr = element?.genres?.genres || [];
                     const title = element?.titleText?.text;
                     return (
-                        <Card cardid={id} imgUrl={imgUrl} genresArray={genresArr} title={title} />
+                        <Card key={movies.indexOf(element)} cardid={id} imgUrl={imgUrl} genresArray={genresArr} title={title} />
                     );
                 })}
             </div>

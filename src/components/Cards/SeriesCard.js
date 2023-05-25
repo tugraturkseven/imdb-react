@@ -3,14 +3,14 @@ import axios from 'axios';
 import Loading from '../Loading/Loading';
 import Card from './Card';
 
-
-async function fetchSeries() {
+async function fetchSeries(page) {
     try {
         const response = await axios.get('https://moviesdatabase.p.rapidapi.com/titles', {
             params: {
                 list: 'most_pop_series',
                 limit: '50',
-                startYear: '2005'
+                startYear: '2005',
+                page: page // Add page parameter
             },
             headers: {
                 'content-type': 'application/octet-stream',
@@ -28,21 +28,39 @@ async function fetchSeries() {
 function SeriesCard() {
     const [loading, setLoading] = useState(true);
     const [series, setSeries] = useState([]);
+    const [page, setPage] = useState(1);
 
     const fetchSeriesData = useCallback(async () => {
-        const seriesData = await fetchSeries();
-        setSeries(seriesData);
+        const seriesData = await fetchSeries(page);
+        setSeries(prevSeries => [...prevSeries, ...seriesData]);
         setLoading(false);
-    }, []);
+    }, [page]);
 
     useEffect(() => {
         fetchSeriesData();
     }, [fetchSeriesData]);
 
-    if (loading) {
-        return (
-            <Loading />
-        )
+    const handleScroll = useCallback(() => {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollBottom = scrollTop + windowHeight;
+
+        if (scrollBottom >= documentHeight) {
+            setPage(prevPage => prevPage + 1);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchSeriesData();
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [fetchSeriesData, handleScroll]);
+
+    if (loading && series.length === 0) {
+        return <Loading />;
     } else {
         return (
             <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
@@ -51,9 +69,7 @@ function SeriesCard() {
                     const imgUrl = element?.primaryImage?.url;
                     const genresArr = element?.genres?.genres || [];
                     const title = element?.titleText?.text;
-                    return (
-                        <Card cardid={id} imgUrl={imgUrl} genresArray={genresArr} title={title} />
-                    );
+                    return <Card key={id} cardid={id} imgUrl={imgUrl} genresArray={genresArr} title={title} />;
                 })}
             </div>
         );
