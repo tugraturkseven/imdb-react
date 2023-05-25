@@ -1,16 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy } from 'react';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 import Card from './Card';
 
-async function fetchMovies() {
+
+
+async function fetchMovies(page) {
     try {
         const response = await axios.get('https://moviesdatabase.p.rapidapi.com/titles', {
             params: {
                 list: 'most_pop_movies',
-                limit: '50',
+                limit: '10',
                 startYear: '2005',
-                info: 'base_info'
+                info: 'base_info',
+                page: page
             },
             headers: {
                 'content-type': 'application/octet-stream',
@@ -28,21 +31,37 @@ async function fetchMovies() {
 function MovieCard() {
     const [loading, setLoading] = useState(true);
     const [movies, setMovies] = useState([]);
+    const [page, setPage] = useState(1);
 
     const fetchMoviesData = useCallback(async () => {
-        const moviesData = await fetchMovies();
-        setMovies(moviesData);
+        const moviesData = await fetchMovies(page);
+        setMovies(prevMovies => [...prevMovies, ...moviesData]);
         setLoading(false);
-    }, []);
+    }, [page]);
 
     useEffect(() => {
         fetchMoviesData();
-    }, [fetchMoviesData]);
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [fetchMoviesData, page]);
 
-    if (loading) {
-        return (
-            <Loading />
-        )
+    const handleScroll = useCallback(() => {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollBottom = scrollTop + windowHeight;
+
+        if (scrollBottom >= documentHeight) {
+            setPage(prevPage => prevPage + 1);
+        }
+    }, []);
+
+
+
+    if (loading && movies.length === 0) {
+        return <Loading />;
     } else {
         return (
             <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
